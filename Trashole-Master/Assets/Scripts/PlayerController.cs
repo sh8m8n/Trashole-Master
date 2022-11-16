@@ -15,9 +15,11 @@ public class PlayerController : MonoBehaviour
     public LayerMask ground;
 
     private Rigidbody2D rb;
+    private Animator anim;
     private void Start() 
     {
         rb = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
     }
     private void Update() 
     {
@@ -26,6 +28,16 @@ public class PlayerController : MonoBehaviour
         if(isGrounded && Input.GetKeyDown(KeyCode.Space))
         {
             rb.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
+            anim.SetTrigger("takeOff");
+        }
+
+        if(isGrounded)
+        {
+            anim.SetBool("isJumping", false);
+        }
+        else
+        {
+            anim.SetBool("isJumping", true);
         }
     }
     private void FixedUpdate() 
@@ -40,6 +52,17 @@ public class PlayerController : MonoBehaviour
         else if(facingRight == false && moveInput < 0)
         {
             Flip();
+        }
+
+
+        //Animations
+        if(moveInput == 0)
+        {
+            anim.SetBool("isRunning", false);
+        }
+        else
+        {
+            anim.SetBool("isRunning", true);
         }
     }
 
